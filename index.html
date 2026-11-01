@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RALLY-X (엑스 렐리 / 방구차) - Retro Arcade Edition</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="arcade-machine">
+    <!-- Top Arcade Marquee -->
+    <header class="marquee">
+      <div class="marquee-glow"></div>
+      <div class="marquee-content">
+        <span class="marquee-badge">NAMCO 1980·81 TRIBUTE</span>
+        <h1>RALLY-X <span class="kor-sub">엑스 렐리 · 방구차</span></h1>
+        <div class="monitor-selector" role="group" aria-label="모니터 화면 모드 선택">
+          <span class="selector-label">MONITOR</span>
+          <button id="btn-color" class="mode-btn active" title="칼라 오락실 모니터 (단축키: C)">
+            <span class="led color-led"></span> 칼라 (COLOR)
+          </button>
+          <button id="btn-bw" class="mode-btn" title="흑백 브라운관 모니터 (단축키: B)">
+            <span class="led bw-led"></span> 흑백 (B&amp;W)
+          </button>
+          <button id="btn-crt" class="mode-btn active" title="브라운관 주사선 효과 켜기/끄기">
+            CRT 효과
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CRT Monitor Bezel & Game Screen -->
+    <main class="bezel">
+      <div class="bezel-inner">
+        <div id="crt-Wrapper" class="crt-screen color-mode crt-scanlines">
+          <canvas id="gameCanvas" width="608" height="448"></canvas>
+          <div class="crt-overlay"></div>
+          <div class="crt-vignette"></div>
+          <div id="monitor-badge" class="monitor-badge">COLOR CRT</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Arcade Control Deck (Joypad / Joystick + Buttons) -->
+    <section class="control-panel" aria-label="오락실 조이패드 컨트롤러">
+      <!-- Top Coin & System Bar -->
+      <div class="deck-top-row">
+        <div class="service-buttons">
+          <button id="btn-coin" class="coin-btn">
+            <span class="coin-slot"></span>
+            <span>INSERT COIN <small>(5 / Shift)</small></span>
+          </button>
+          <button id="btn-start" class="start-btn">
+            <span class="start-led"></span>
+            <span>1P START <small>(1 / Enter)</small></span>
+          </button>
+        </div>
+
+        <div class="credit-readout">
+          CREDIT <span id="credit-count">02</span>
+        </div>
+
+        <div class="utility-buttons">
+          <button id="btn-bgm-style" class="util-btn active" title="오리지널 1980 랠리X / 1981 뉴 랠리X(방구차) BGM 전환 (단축키: N)">
+            🎵 BGM: 뉴 랠리X (방구차)
+          </button>
+          <button id="btn-sound" class="util-btn active" title="배경음악 및 효과음 켜기/끄기 (M)">
+            🔊 SOUND ON
+          </button>
+          <button id="btn-pause" class="util-btn" title="일시정지 (P)">
+            ⏸ PAUSE
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Joypad & Action Deck -->
+      <div class="deck-main-row">
+        <!-- Left: Arcade Joystick + D-Pad Hybrid -->
+        <div class="joypad-zone">
+          <div class="joypad-plate" id="joystick-zone">
+            <!-- Directional guide arrows / clickable D-pad segments -->
+            <button class="dpad-dir dpad-up" data-dir="UP" aria-label="위로 이동">▲</button>
+            <button class="dpad-dir dpad-down" data-dir="DOWN" aria-label="아래로 이동">▼</button>
+            <button class="dpad-dir dpad-left" data-dir="LEFT" aria-label="왼쪽으로 이동">◀</button>
+            <button class="dpad-dir dpad-right" data-dir="RIGHT" aria-label="오른쪽으로 이동">▶</button>
+
+            <!-- Dust washer & Pivot -->
+            <div class="joystick-dust-washer"></div>
+            <div class="joystick-base">
+              <div id="joystick-shaft" class="joystick-shaft">
+                <div id="joystick-ball" class="joystick-ball">
+                  <div class="ball-highlight"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="control-caption">4-WAY ARCADE JOYSTICK <small>(방향키 / WASD / 터치·드래그)</small></div>
+        </div>
+
+        <!-- Center Instruction Sticker -->
+        <div class="instruction-card">
+          <div class="inst-title">HOW TO PLAY · 게임 방법</div>
+          <ul>
+            <li><span class="dot yellow-dot"></span> <b>노란 깃발 10개</b>를 모두 모으면 스테이지 클리어!</li>
+            <li><span class="dot special-dot">S</span> <b>S(스페셜) 깃발</b> 획득 시 이후 깃발 점수 <b>2배(x2)</b>!</li>
+            <li><span class="dot lucky-dot">L</span> <b>L(럭키) 깃발</b> 획득 시 남은 연료(FUEL) 보너스 점수!</li>
+            <li><span class="dot red-dot"></span> 빨간 추격차에게 쫓길 땐 <b>방구(SMOKE) 버튼</b>으로 연막 분사!</li>
+            <li>⚠️ 바위(ROCK)나 적 차량에 부딪히면 <b>BANG!</b> 폭발합니다.</li>
+          </ul>
+        </div>
+
+        <!-- Right: Arcade Action Buttons -->
+        <div class="action-zone">
+          <div class="arcade-buttons-cluster">
+            <div class="arcade-btn-wrap">
+              <button id="btn-smoke" class="arcade-push-btn red-btn" aria-label="연막탄 방구 분사">
+                <span class="btn-cap">
+                  <span class="btn-main-text">SMOKE</span>
+                  <span class="btn-sub-text">방구 · 연막</span>
+                </span>
+              </button>
+              <span class="btn-label">SPACE / Z</span>
+            </div>
+
+            <div class="arcade-btn-wrap">
+              <button id="btn-boost-monitor" class="arcade-push-btn yellow-btn" aria-label="칼라 흑백 모니터 전환">
+                <span class="btn-cap">
+                  <span class="btn-main-text">COLOR / B&amp;W</span>
+                  <span class="btn-sub-text">화면 전환</span>
+                </span>
+              </button>
+              <span class="btn-label">C / B KEY</span>
+            </div>
+          </div>
+          <div class="control-caption">ACTION BUTTONS <small>(스페이스바 / Z / 클릭)</small></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="game.js?v=3"></script>
+</body>
+</html>
